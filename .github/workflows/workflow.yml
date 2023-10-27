@@ -17,7 +17,7 @@ jobs:
       run: python3 main.py
 
     - name: run python test
-      run: pytest
+      run: python3 text.py
 
     - name: Upload file to s3
       uses: keithweaver/aws-s3-github-action@v1.0.0
