@@ -1,0 +1,30 @@
+name: Push to s3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  builds:
+    runs-on: Ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pip
+      run: pip install -r requirements.txt
+
+    - name: run python script
+      run: python3 main.py
+
+    - name: run python test
+      run: pytest
+
+    - name: Upload file to s3
+      uses: keithweaver/aws-s3-github-action@v1.0.0
+      with:
+        command: cp
+        source: ./new.txt
+        destination: s3://${{ secrets.AWS_BUCKET_NAME }}/
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: us-west-2
